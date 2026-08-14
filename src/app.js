@@ -20,6 +20,14 @@ app.get('/products/:id', async (req,res) => {
     if (!product) return res.status(404).json({erro:"Produto não encontrado"});
     res.json(product)
 })
+app.get('/product', async (req,res) => {
+    const { maior } = req.query;
+    let products = await readProducts()
+    if (maior) {
+        products = products.filter((p) => p.preco >= Number(maior))
+    }
+    res.json(products)
+});
 app.post('/products', async (req,res) => {
     const { nome, preco } = req.body || {}
     if (!nome || typeof nome !== 'string') {
