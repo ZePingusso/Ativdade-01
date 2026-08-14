@@ -1,4 +1,17 @@
 [
-  { "id": 1, "nome": "Celular", "preco":"1899.90" },
-  { "id": 2, "nome": "Televisão", "preco": "4900.00" }
+  {
+    "id": 1,
+    "nome": "Celular",
+    "preco": 1899.90
+  },
+  {
+    "id": 2,
+    "nome": "Televisão",
+    "preco": 4900.00
+  },
+  {
+    "id": 3,
+    "nome": "Teclado",
+    "preco": 100
+  }
 ]
