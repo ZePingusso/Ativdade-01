@@ -2,16 +2,21 @@
   {
     "id": 1,
     "nome": "Celular",
-    "preco": 1899.90
+    "preco": 1899.9
   },
   {
     "id": 2,
     "nome": "Televisão",
-    "preco": 4900.00
+    "preco": 4900
   },
   {
     "id": 3,
     "nome": "Teclado",
     "preco": 100
+  },
+  {
+    "id": 4,
+    "nome": "Mouse Gamer",
+    "preco": 79.9
   }
 ]

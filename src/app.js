@@ -38,8 +38,16 @@ app.post('/products', async (req,res) => {
     }
 
     const products = await readProducts()
-    const novoId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1
 
+    const productExist = products.some(product => product.nome === nome)
+    if (productExist) {
+        return res.status(409).json({
+            erro: 'Este produto já existe'
+        })
+    }
+
+    const novoId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1
+    
     const novo = { id: novoId, nome, preco }
     products.push(novo)
     await writeProducts(products)
