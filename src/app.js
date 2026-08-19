@@ -55,4 +55,57 @@ app.post('/products', async (req,res) => {
     res.status(201).json(novo)
 })
 
+app.post('/products/batch', async (req,res) => {
+    const newProducts = req.body
+
+    if (!Array.isArray(newProducts)) {
+        return res.status(400).json({
+            erro: 'É obrigatório o corpo da requisição ser um array'
+        })
+    }
+    const products = await readProducts()
+
+    for (const product of newProducts) {
+        if (!product || !product.nome || typeof product.nome !== 'string') {
+            return res.status(400).json({
+                erro: 'Todos os produtos precisam obrigatoriamente ter um nome!'
+            })
+        }
+
+        if (product.preco === undefined || typeof product.preco !== 'number') {
+            return res.status(400).json({
+                erro: 'Todos os produtos precisam obrigatoriamente ter um preço!'
+            })
+        }
+    }
+
+    for (const product of newProducts) {
+        const productExist = products.some(
+            products => products.nome === product.nome
+        )
+        if (productExist) {
+            return res.status(409).json({
+                erro: `O produto ${product.nome} já existe!`
+            })
+        }
+    }
+    
+    let proximoId = products.length ? Math.max(...products.map(product => product.id)) + 1 : 1
+    
+    const createdProducts = newProducts.map(product => {
+        const newProduct = {
+            id: proximoId++,
+            nome: product.nome,
+            preco: product.preco
+        }
+        products.push(newProduct)
+
+        return newProduct
+    })
+
+    await writeProducts(products)
+
+    res.status(201).json(createdProducts)
+}) 
+console.log("BATCH CARREGADO!");
 export default app;
