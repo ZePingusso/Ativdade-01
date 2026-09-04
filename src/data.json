@@ -23,15 +23,5 @@
     "id": 5,
     "nome": "Notebook",
     "preco": 3500
-  },
-  {
-    "id": 6,
-    "nome": "Webcam",
-    "preco": 200
-  },
-  {
-    "id": 7,
-    "nome": "Headset",
-    "preco": 150
   }
 ]

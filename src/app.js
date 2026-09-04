@@ -143,5 +143,29 @@ app.patch('/produtos/:id', async (req, res) => {
     await writeProdutos(products)
     res.json(product)
 })
+
+app.delete('/products/:id', async (req, res) => {
+const id = Number(req.params.id)
+const products = await readProducts()
+const idx = products.findIndex(p => p.id === id)
+if (idx === -1) return res.status(404).json({ erro: 'Produto não encontrado' })
+
+products.splice(idx, 1)
+await writeProducts(products)
+res.status(204).end()
+})
+
+app.delete('/productss/:id', async (req, res) => {
+const id = Number(req.params.id)
+const products = await readProducts()
+const product = products.find(p => p.id === id)
+if (!product) return res.status(404).json({ erro: 'Produto não encontrado' })
+if (product.deletedAt) return res.status(409).json({ erro: 'Já removido' })
+
+product.deletedAt = new Date().toISOString()
+await writeProducts(products)
+res.status(204).end()
+})
+
 console.log("BATCH CARREGADO!");
 export default app;
