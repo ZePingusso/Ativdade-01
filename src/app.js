@@ -16,7 +16,7 @@ app.get('/products', async (req, res) => {
 })
 app.get('/products/:id', async (req, res) => {
     const products = await readProducts()
-    const product = products.find(p => p.id === Number(req.params.id));
+    const product = products.find(produtin => produtin.id === Number(req.params.id));
     if (!product) return res.status(404).json({ erro: "Produto não encontrado" });
     res.json(product)
 })
@@ -24,7 +24,7 @@ app.get('/product', async (req, res) => {
     const { maior } = req.query;
     let products = await readProducts()
     if (maior) {
-        products = products.filter((p) => p.preco >= Number(maior))
+        products = products.filter((produtin) => produtin.preco >= Number(maior))
     }
     res.json(products)
 });
@@ -120,7 +120,7 @@ app.put('/produtos/:id', async (req, res) => {
     }
 
     const products = await readProdutos()
-    const idx = products.findIndex(p => p.id === id)
+    const idx = products.findIndex(produtin => produtin.id === id)
     if (idx === -1) return res.status(404).json({ erro: 'Produto não encontrado' })
 
     products[idx] = { id, nome, preco }
@@ -132,7 +132,7 @@ app.put('/produtos/:id', async (req, res) => {
 app.patch('/produtos/:id', async (req, res) => {
     const id = Number(req.params.id)
     const products = await readProdutos()
-    const product = products.find(p => p.id === id)
+    const product = products.find(produtin => produtin.id === id)
     if (!product) return res.status(404).json({ erro: 'Produto não encontrado' })
 
     const { id: _, createdAt: __, updatedAt: ___, ...dadosPermitidos } = req.body || {}
@@ -147,7 +147,7 @@ app.patch('/produtos/:id', async (req, res) => {
 app.delete('/products/:id', async (req, res) => {
 const id = Number(req.params.id)
 const products = await readProducts()
-const idx = products.findIndex(p => p.id === id)
+const idx = products.findIndex(produtin => produtin.id === id)
 if (idx === -1) return res.status(404).json({ erro: 'Produto não encontrado' })
 
 products.splice(idx, 1)
@@ -158,7 +158,7 @@ res.status(204).end()
 app.delete('/productss/:id', async (req, res) => {
 const id = Number(req.params.id)
 const products = await readProducts()
-const product = products.find(p => p.id === id)
+const product = products.find(produtin => produtin.id === id)
 if (!product) return res.status(404).json({ erro: 'Produto não encontrado' })
 if (product.deletedAt) return res.status(409).json({ erro: 'Já removido' })
 
