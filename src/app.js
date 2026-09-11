@@ -1,5 +1,5 @@
 import express from 'express';
-import { readProducts, writeProducts } from './db.js';
+import { readProducts, writeProducts, nextId, validateProductPayload } from './db.js';
 
 const app = express()
 app.use(express.json())
@@ -165,6 +165,16 @@ if (product.deletedAt) return res.status(409).json({ erro: 'Já removido' })
 product.deletedAt = new Date().toISOString()
 await writeProducts(products)
 res.status(204).end()
+})
+
+app.post('/produtosss', async (req, res) => {
+  const valid = validateProductPayload(req.body)
+  if (!valid.ok) return res.status(400).json({ erro: valid.erro })
+  const products = await readProducts()
+  const novo = { id: nextId(products), ...valid.data }
+  products.push(novo)
+  await writeProducts(products)
+  res.status(201).json(novo)
 })
 
 console.log("BATCH CARREGADO!");
