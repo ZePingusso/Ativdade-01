@@ -20,14 +20,3 @@ export async function readProducts() {
         throw err;
     }
 }
-
-export function validateProductPayload(body) {
-  const { nome, preco } = body || {}
-  if (!nome) return { ok: false, erro: 'nome é obrigatório' }
-  if (!preco) return { ok: false, erro: 'preco inválido' }
-  return { ok: true, data: { nome, preco } }
-}
-
-export function nextId(products) {
-  return products.length ? Math.max(...products.map(produtin => produtin.id)) + 1 : 1
-}

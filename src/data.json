@@ -28,5 +28,16 @@
     "id": 6,
     "nome": "Teclado Dell",
     "preco": 123
+  },
+  {
+    "id": 7,
+    "nome": "Teclado Gamer",
+    "preco": 250
+  },
+  {
+    "id": 8,
+    "nome": "Teclado Normal",
+    "preco": 100,
+    "deletedAt": "2026-10-01T02:36:52.057Z"
   }
 ]
