@@ -10,16 +10,18 @@ import {
     deleteProduct,
     softDeleteProduct
 } from '../controllers/productController.js'
+import { valida } from '../middlewares/valid.js'
+import { productSchema, updateProductSchema } from '../schemas/productSchema.js'
 
 const router = Router()
 
 router.get('/', listProducts)
 router.get('/filter', filterProducts)
 router.get('/:id', getProduct)
-router.post('/', createProduct)
-router.post('/batch', createProducts)
-router.put('/:id', updateProduct)
-router.patch('/:id', patchProduct)
+router.post('/', valida(productSchema), createProduct)
+router.post('/batch', valida(productSchema), createProducts)
+router.put('/:id', valida(updateProductSchema), updateProduct)
+router.patch('/:id', valida(updateProductSchema), patchProduct)
 router.delete('/:id', deleteProduct)
 router.delete('/:id/soft', softDeleteProduct)
 
