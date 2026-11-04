@@ -39,5 +39,10 @@
     "nome": "Teclado Normal",
     "preco": 100,
     "deletedAt": "2026-10-01T02:36:52.057Z"
+  },
+  {
+    "id": 9,
+    "nome": "Carregador 40W",
+    "preco": 50
   }
 ]
