@@ -3,11 +3,63 @@ import { productsService } from '../services/productService.js'
 
 export async function listProducts(req, res, next) {
     try {
-        const products = await productsModel.findAll()
-        res.json(products)
+        const page = Number(req.query.page) || 1
+        const limit = Math.min(Number(req.query.limit) || 20, 100)
+        const offset = (page - 1) * limit
+
+        const all = await productsModel.findAll()
+
+        const filtrados = all.filter(product => {
+            if (
+                req.query.nome &&
+                !product.nome.toLowerCase().includes(req.query.nome.toLowerCase())
+            ) {
+                return false
+            }
+
+            return true
+        })
+
+        const ordenados = applySort(filtrados, req.query.sort)
+
+        const data = ordenados.slice(offset, offset + limit)
+
+        res.json({
+            data,
+            meta: {
+                total: filtrados.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filtrados.length / limit)
+            }
+        })
+
     } catch (err) {
         next(err)
     }
+}
+
+function applySort(products, sort) {
+    if (!sort) return products
+
+    const desc = sort.startsWith('-')
+    const campo = desc ? sort.slice(1) : sort
+
+    if (!['nome', 'preco'].includes(campo)) {
+        return products
+    }
+
+    return [...products].sort((a, b) => {
+        if (campo === 'nome') {
+            return desc
+                ? b.nome.localeCompare(a.nome)
+                : a.nome.localeCompare(b.nome)
+        }
+
+        return desc
+            ? b.preco - a.preco
+            : a.preco - b.preco
+    })
 }
 
 export async function getProduct(req, res, next) {
@@ -28,16 +80,36 @@ export async function getProduct(req, res, next) {
 
 export async function filterProducts(req, res, next) {
     try {
-        const maior = Number(req.query.maior)
         const products = await productsModel.findAll()
-        if (req.query.maior) {
-            return res.json(
-                products.filter(
-                    product => product.preco >= maior
-                )
-            )
-        }
-        res.json(products)
+
+        const filtrados = products.filter(product => {
+
+            if (
+                req.query.nome &&
+                !product.nome.toLowerCase().includes(req.query.nome.toLowerCase())
+            ) {
+                return false
+            }
+
+            if (
+                req.query.preco &&
+                product.preco !== Number(req.query.preco)
+            ) {
+                return false
+            }
+
+            if (
+                req.query.maior &&
+                product.preco < Number(req.query.maior)
+            ) {
+                return false
+            }
+
+            return true
+        })
+
+        res.json(filtrados)
+
     } catch (err) {
         next(err)
     }
